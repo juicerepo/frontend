@@ -9,7 +9,7 @@
     active-text-color="#ffd04b"
     :collapse="isCollapse">
 
-    <h3>{{ isCollapse ?  '后台': '订单后台管理系统' }}</h3> 
+    <h3>{{ isCollapse ?  '后台': '图书后台管理系统' }}</h3> 
 
     <el-menu-item @click="clickMenu(item)" v-for="item in noChildren" :key="item.name" :index="item.name">
       <i :class="`el-icon-${item.icon}`"></i>
@@ -65,7 +65,7 @@ export default {
         {
           path: "/mall",
           name: "mall",
-          label: "商品管理",
+          label: "图书管理",
           icon: "goods",
           url: "MallManage/MallManage",
         },
@@ -113,6 +113,7 @@ export default {
       if(this.$route.path !== item.path && !(this.$route.path === '/home' && (item.path ==="/"))){
         this.$router.push(item.path)//route已挂载到vue下，可以实现页面跳转
       }
+      this.$store.commit('selectMenu',item)
     }
   },
   computed:{

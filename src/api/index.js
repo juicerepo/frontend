@@ -6,14 +6,14 @@ export const getData = () => {
     return http.get('/home/getData')
 }
 
-export const getUser = (params) => {
+export const getUserList = (params) => {
     console.log(params, 'params')
     // 返回用户列表
     return http.get('/user/getUser', params)
 }
 
 export const addUser = (data) => {
-    return http.post('/user/add', data)
+    return http.post('/admin', data)
 }
 
 export const editUser = (data) => {

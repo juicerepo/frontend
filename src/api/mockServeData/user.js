@@ -59,24 +59,33 @@ export default {
    * @param name, addr, age, birth, sex
    * @return {{code: number, data: {message: string}}}
    */
-  createUser: config => {
-    const { name, addr, age, birth, sex } = JSON.parse(config.body)
-    console.log(JSON.parse(config.body))
+  addUser: config => {
+    // 解析请求体中的管理员数据
+    // const { admin_id, admin_password, admin_name, admin_role, create_time, update_time } = JSON.parse(config.body);
+    const { admin_password, admin_name, admin_role,} = JSON.parse(config.body);
+    
+    console.log('添加管理员:', JSON.parse(config.body));
+    
+    // 添加到管理员列表（假设 List 是管理员数据集合）
     List.unshift({
-      id: Mock.Random.guid(),
-      name: name,
-      addr: addr,
-      age: age,
-      birth: birth,
-      sex: sex
-    })
+      //admin_id: admin_id,
+      admin_password: admin_password || '123456', // 如果未提供密码则使用默认值
+      admin_name: admin_name,
+      admin_role: admin_role, // 1=普通管理员, 2=超级管理员
+      // create_time: create_time || new Date().toISOString(), // 如果未提供则使用当前时间
+      // update_time: update_time || new Date().toISOString()  // 如果未提供则使用当前时间
+    });
+    
+    // 返回成功响应
     return {
-      code: 20000,
+      code: 0,
       data: {
-        message: '添加成功'
+        message: '用户添加成功'
       }
-    }
+    };
   },
+
+
   /**
    * 删除用户
    * @param id
