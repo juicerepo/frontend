@@ -9,12 +9,12 @@ export default {
     for (let i = 0; i < 7; i++) {
       List.push(
         Mock.mock({
-          苹果: Mock.Random.float(100, 8000, 0, 0),
-          vivo: Mock.Random.float(100, 8000, 0, 0),
-          oppo: Mock.Random.float(100, 8000, 0, 0),
-          魅族: Mock.Random.float(100, 8000, 0, 0),
-          三星: Mock.Random.float(100, 8000, 0, 0),
-          小米: Mock.Random.float(100, 8000, 0, 0)
+          语文: Mock.Random.float(100, 8000, 0, 0),
+          数学: Mock.Random.float(100, 8000, 0, 0),
+          英语: Mock.Random.float(100, 8000, 0, 0),
+          政治: Mock.Random.float(100, 8000, 0, 0),
+          地理: Mock.Random.float(100, 8000, 0, 0),
+          历史: Mock.Random.float(100, 8000, 0, 0)
         })
       )
     }
@@ -24,27 +24,27 @@ export default {
         // 饼图
         videoData: [
           {
-            name: '小米',
+            name: '语文',
             value: 2999
           },
           {
-            name: '苹果',
+            name: '数学',
             value: 5999
           },
           {
-            name: 'vivo',
+            name: '英语',
             value: 1500
           },
           {
-            name: 'oppo',
+            name: '政治',
             value: 1999
           },
           {
-            name: '魅族',
+            name: '历史',
             value: 2200
           },
           {
-            name: '三星',
+            name: '地理',
             value: 4500
           }
         ],
@@ -93,37 +93,37 @@ export default {
         },
         tableData: [
           {
-            name: 'oppo',
+            name: '语文',
             todayBuy: 500,
             monthBuy: 3500,
             totalBuy: 22000
           },
           {
-            name: 'vivo',
+            name: '数学',
             todayBuy: 300,
             monthBuy: 2200,
             totalBuy: 24000
           },
           {
-            name: '苹果',
+            name: '英语',
             todayBuy: 800,
             monthBuy: 4500,
             totalBuy: 65000
           },
           {
-            name: '小米',
+            name: '政治',
             todayBuy: 1200,
             monthBuy: 6500,
             totalBuy: 45000
           },
           {
-            name: '三星',
+            name: '历史',
             todayBuy: 300,
             monthBuy: 2000,
             totalBuy: 34000
           },
           {
-            name: '魅族',
+            name: '地理',
             todayBuy: 350,
             monthBuy: 3000,
             totalBuy: 22000

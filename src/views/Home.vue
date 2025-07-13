@@ -10,7 +10,7 @@
                   </div>
               </div>
               <div class="login-info">
-                  <p>上次登录时间：<span>2025-7-7</span></p>
+                  <p>上次登录时间：<span>2025-7-10</span></p>
                   <p>上次登录地点：<span>湖北武汉</span></p>
               </div>
           </el-card>
@@ -48,21 +48,28 @@
                   </div>
               </el-card>
           </div>
+
           <el-card style="height: 280px">
               <!-- 折线图 -->
               <div ref="echarts1" style="height: 280px"></div>
           </el-card>
+
+          <!-- 下面并列的饼状图 -->
           <div class="graph">
               <el-card style="height: 260px">
                   <div ref="echarts2" style="height: 260px"></div>
               </el-card>
+
               <el-card style="height: 260px">
                   <div ref="echarts3" style="height: 240px"></div>
               </el-card>
           </div>
+
       </el-col>
   </el-row>
 </template>
+
+
 <script>
 import { getData } from '../api'
 import * as echarts from 'echarts'
@@ -71,7 +78,7 @@ export default {
       return {
           tableData: [],
           tableLabel: {
-              name: '品牌',
+              name: '种类',
               todayBuy: '今日购买',
               monthBuy: '本月购买',
               totalBuy: '总购买'
@@ -116,40 +123,43 @@ export default {
           ]
       }
   },
+
   mounted() {
       getData().then(({ data }) => {
           const { tableData } = data.data
           console.log(data.data)
           this.tableData = tableData
 
+          // 处理数据xAxis，解构数据
+          const { orderData, userData, videoData } = data.data          
+
+          //关于图标的使用：https://developer.aliyun.com/article/1613350
+          //echarts必须具备的属性：见官网示例，包括：x轴，y轴，legend图例组件，series数据分组类别即同一横坐标下的属性
+          //echarts的配置分为三步：1.获取dom元素并创建实例，2.设置配置项option和初始化数据，3.将配置项设置到指定的ecahrt实例中setOption(option)
           // 基于准备好的dom，初始化echarts实例
           const echarts1 = echarts.init(this.$refs.echarts1)
-          // 指定图表的配置项和数据
-          var echarts1Option = {}
-          // 处理数据xAxis
-          const { orderData, userData, videoData } = data.data
-          const xAxis = Object.keys(orderData.data[0])
-          const xAxisData = {
-              data: xAxis
-          }
-          echarts1Option.xAxis = xAxisData
-          echarts1Option.yAxis = {}
-          echarts1Option.legend = xAxisData
-          echarts1Option.series = []
-          xAxis.forEach(key => {
-              echarts1Option.series.push({
-                  name: key,
-                  data: orderData.data.map(item => item[key]),
-                  type: 'line'
-              })
-          })
-          console.log(echarts1Option)
-          // 使用刚指定的配置项和数据显示图表。
-          echarts1.setOption(echarts1Option)
+
+          const echarts1Option = {
+              xAxis: {
+                data: Object.keys(orderData.data[0])  // 获取订单数据的所有键名（品牌）
+              },
+              yAxis: {},
+              legend: {  // 图例使用和x轴相同的数据
+                data: Object.keys(orderData.data[0])
+              },
+              series: Object.keys(orderData.data[0]).map(key => ({
+                name: key,
+                data: orderData.data.map(item => item[key]),  // 提取每个指标的数据
+                type: 'line'
+              }))
+            }
+            echarts1.setOption(echarts1Option)
+
 
           // 柱状图
-          const echarts2 = echarts.init(this.$refs.echarts2)
-          const eachrts2Option = {
+          const echarts2 = echarts.init(this.$refs.echarts2) //初始化
+          const eacharts2Option = {
+            //设置样式
               legend: {
                   // 图例文字颜色
                   textStyle: {
@@ -161,10 +171,11 @@ export default {
               },
               // 提示框
               tooltip: {
-                  trigger: "axis",
+                  trigger: "axis",//坐标轴触发
               },
+
               xAxis: {
-                  type: "category", // 类目轴
+                  type: "category", // 类目轴，非连续数据
                   data: userData.map(item => item.date),
                   axisLine: {
                   lineStyle: {
@@ -172,10 +183,11 @@ export default {
                   },
                   },
                   axisLabel: {
-                  interval: 0,
+                  interval: 0,//显示所有标签，不间隔
                   color: "#333",
                   },
               },
+
               yAxis: [
                   {
                   type: "value",
@@ -200,13 +212,13 @@ export default {
                   }
               ],
           }
-          echarts2.setOption(eachrts2Option)
+          echarts2.setOption(eacharts2Option)
 
           // 饼状图
           const echarts3 = echarts.init(this.$refs.echarts3)
           const eachrts3Option = {
               tooltip: {
-                  trigger: "item",
+                  trigger: "item",//数据项触发
               },
               color: [
                   "#0f78f4",
@@ -229,6 +241,8 @@ export default {
   }
 }
 </script>
+
+
 <style lang="less" scoped>
 .user {
   padding-bottom: 20px;
@@ -300,7 +314,7 @@ export default {
 .graph {
   margin-top: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between;//两边贴边
   .el-card {
       width: 48%;
   }

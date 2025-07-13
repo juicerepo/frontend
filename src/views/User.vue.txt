@@ -7,44 +7,21 @@
       stripe
       style="width: 100%">
       <el-table-column
-        prop="admin_id"
-        label="用户Id"
-        width="200">
+        prop="date"
+        label="日期"
+        width="180">
       </el-table-column>
       <el-table-column
-        prop="admin_password"
-        label="用户密码"
-        width="200">
+        prop="name"
+        label="姓名"
+        width="180">
       </el-table-column>
       <el-table-column
-        prop="admin_name"
-        label="用户姓名"
-        width="200">
+        prop="address"
+        label="地址">
       </el-table-column>
-      <el-table-column
-        prop="admin_role"
-        label="用户角色"
-        width="200">
-      </el-table-column>
-      <el-table-column
-        prop="creat_time"
-        label="创建时间"
-        width="200">
-      </el-table-column>
-      <el-table-column
-        prop="update_time"
-        label="更新时间">
-      </el-table-column>
-
     </el-table>
 
-    <!-- <el-pagination
-      @current-change="handlePageChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalUsers">
-    </el-pagination> -->
 
     <el-dialog
       title="新增用户"
@@ -55,12 +32,8 @@
 
       <!-- 录入表单信息 -->
       <el-form :rules="rules" ref="form" :model="form" label-width="auto">
-        <!-- <el-form-item label="用户ID" prop="admin_id">
+        <el-form-item label="用户ID" prop="admin_id">
           <el-input placeholder="请输入ID" v-model="form.admin_id"></el-input>
-        </el-form-item> -->
-
-        <el-form-item label="用户姓名" prop="admin_name">
-          <el-input placeholder="请输入姓名" v-model="form.admin_name"></el-input>
         </el-form-item>
 
         <el-form-item label="用户密码" prop="admin_password">
@@ -72,6 +45,10 @@
             @change="handlePasswordChange">
           </el-input>
           <div v-if="showPasswordTip" class="password-tip">密码将被设置为默认值: 123456</div>
+        </el-form-item>
+
+        <el-form-item label="用户姓名" prop="admin_name">
+          <el-input placeholder="请输入姓名" v-model="form.admin_name"></el-input>
         </el-form-item>
 
         <el-form-item label="用户角色" prop="admin_role">
@@ -92,24 +69,23 @@
 </template>
 
 <script>
-import { addUser,getUser} from '../api/index'; // 引入添加用户的API
 export default {
   data() {
     return {
       dialogVisible: false,
       showPasswordTip: false,
       form: {
-        //admin_id: '',
+        admin_id: '',
         admin_password: '',
         admin_name: '',
         admin_role: '1',
-        //create_time: '',
-        //update_time: '',
+        create_time: '',
+        update_time: '',
       },
       rules: {
-        // admin_id: [
-        //   { required: true, message: '请输入用户ID', trigger: 'blur' }
-        // ],
+        admin_id: [
+          { required: true, message: '请输入用户ID', trigger: 'blur' }
+        ],
         admin_name: [
           { required: true, message: '请输入用户姓名', trigger: 'blur' }
         ],
@@ -148,11 +124,11 @@ export default {
       this.$refs.form.validateField('admin_role');
     },
     
-    // // 生成当前时间
-    // generateCurrentTime() {
-    //   const now = new Date();
-    //   return now.toISOString().slice(0, 19).replace('T', ' ');
-    // },
+    // 生成当前时间
+    generateCurrentTime() {
+      const now = new Date();
+      return now.toISOString().slice(0, 19).replace('T', ' ');
+    },
     
     // 重置表单
     resetForm() {
@@ -178,10 +154,10 @@ export default {
             });
           }
           
-          // // 2. 生成时间
-          // const currentTime = this.generateCurrentTime();
-          // this.form.create_time = currentTime;
-          // this.form.update_time = currentTime;
+          // 2. 生成时间
+          const currentTime = this.generateCurrentTime();
+          this.form.create_time = currentTime;
+          this.form.update_time = currentTime;
           
           // 3. 准备发送给后端的数据
           const formData = {
@@ -202,59 +178,17 @@ export default {
             this.$message.error('添加失败: ' + error.message);
           });
           */
-
           
-
-        //   // 4. 实际发送请求到后端
-        //   addUser(formData).then(res => {
-        //     console.log("后端响应:", res); // 关键：打印完整响应
-        //     if (res.code === 0) {
-        //       this.$message.success('添加成功');
-        //       this.dialogVisible = false;
-        //       this.resetForm();
-        //     } else {
-        //       this.$message.error(res.message || '添加失败');
-        //     }
-        //   }).catch(error => {
-        //     this.$message.error('添加失败: ' + error.message);
-        //   });
-        // } else {
-        //   this.$message.error('请填写必填字段');
-        //   return false;
-        // }
-
-        addUser(formData).then(res => {
-          console.log("完整响应:", res); // 保留日志便于调试
-          
-          // 修正点1：使用 resultCode 代替 code
-          // 修正点2：通过 res.data 访问业务数据
-          if (res.data.resultCode === 0) { 
-            this.$message.success('添加成功');
-            this.dialogVisible = false;
-            this.resetForm();
-          } else {
-            // 修正点3：使用后端返回的明确消息
-            this.$message.error(res.data.resultMsg || '操作失败'); 
-          }
-        }).catch(error => {
-          this.$message.error('请求失败: ' + error.message);
-        });
-            } else {
+          // 5. 模拟成功提交
+          this.$message.success('表单验证通过，数据已准备好提交');
+          this.dialogVisible = false;
+          this.resetForm();
+        } else {
           this.$message.error('请填写必填字段');
           return false;
         }
-
-        //   // 5. 模拟成功提交
-        //   this.$message.success('表单验证通过，数据已准备好提交');
-        //   this.dialogVisible = false;
-        //   this.resetForm();
-        // } else {
-        //   this.$message.error('请填写必填字段');
-        //   return false;
-      //   }
       });
     }
-    
   }
 }
 </script>

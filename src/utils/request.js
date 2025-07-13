@@ -4,8 +4,8 @@ import axios from 'axios'
 //创建实例
 const http = axios.create({
   //通用请求的地址前缀
-  baseURL:'/api',
-  timeout:100000, //超时时间为10s
+  baseURL:'http://localhost:8080',
+  timeout:10000, //超时时间为10s
 })
 
 // 添加请求拦截器
