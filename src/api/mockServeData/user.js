@@ -71,7 +71,7 @@ export default {
       //admin_id: admin_id,
       admin_password: admin_password || '123456', // 如果未提供密码则使用默认值
       admin_name: admin_name,
-      admin_role: admin_role, // 1=普通管理员, 2=超级管理员
+      admin_role: admin_role, // 1=用户, 2=超级管理员
       // create_time: create_time || new Date().toISOString(), // 如果未提供则使用当前时间
       // update_time: update_time || new Date().toISOString()  // 如果未提供则使用当前时间
     });

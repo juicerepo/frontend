@@ -35,16 +35,7 @@
         prop="update_time"
         label="更新时间">
       </el-table-column>
-
     </el-table>
-
-    <!-- <el-pagination
-      @current-change="handlePageChange"
-      :current-page="currentPage"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalUsers">
-    </el-pagination> -->
 
     <el-dialog
       title="新增用户"
@@ -55,9 +46,6 @@
 
       <!-- 录入表单信息 -->
       <el-form :rules="rules" ref="form" :model="form" label-width="auto">
-        <!-- <el-form-item label="用户ID" prop="admin_id">
-          <el-input placeholder="请输入ID" v-model="form.admin_id"></el-input>
-        </el-form-item> -->
 
         <el-form-item label="用户姓名" prop="admin_name">
           <el-input placeholder="请输入姓名" v-model="form.admin_name"></el-input>
@@ -92,24 +80,18 @@
 </template>
 
 <script>
-import { addUser,getUser} from '../api/index'; // 引入添加用户的API
+import { addUser, getUserList} from '../api/index'; // 引入添加用户的API
 export default {
   data() {
     return {
       dialogVisible: false,
       showPasswordTip: false,
       form: {
-        //admin_id: '',
         admin_password: '',
         admin_name: '',
         admin_role: '1',
-        //create_time: '',
-        //update_time: '',
       },
       rules: {
-        // admin_id: [
-        //   { required: true, message: '请输入用户ID', trigger: 'blur' }
-        // ],
         admin_name: [
           { required: true, message: '请输入用户姓名', trigger: 'blur' }
         ],
@@ -120,6 +102,7 @@ export default {
       tableData:[]
     };
   },
+
   methods: {
     handleClose(done) {
       this.$confirm('确定要关闭对话框吗?', '提示', {
@@ -148,12 +131,6 @@ export default {
       this.$refs.form.validateField('admin_role');
     },
     
-    // // 生成当前时间
-    // generateCurrentTime() {
-    //   const now = new Date();
-    //   return now.toISOString().slice(0, 19).replace('T', ' ');
-    // },
-    
     // 重置表单
     resetForm() {
       if (this.$refs.form) {
@@ -167,8 +144,9 @@ export default {
     handleSubmit() {
       this.$refs.form.validate(valid => {
         console.log(valid,'valid')
+
         if (valid) {
-          // 1. 处理密码默认值
+          // 处理密码默认值
           if (!this.form.admin_password) {
             this.form.admin_password = '123456';
             this.$message({
@@ -178,50 +156,13 @@ export default {
             });
           }
           
-          // // 2. 生成时间
-          // const currentTime = this.generateCurrentTime();
-          // this.form.create_time = currentTime;
-          // this.form.update_time = currentTime;
-          
-          // 3. 准备发送给后端的数据
+          // 准备发送给后端的数据
           const formData = {
             ...this.form,
             admin_role: parseInt(this.form.admin_role) // 转换为数字
           };
           
           console.log('提交的数据:', formData);
-          
-          // 4. 实际发送请求到后端
-          // 注意: 这里需要替换为您的实际API调用
-          /*
-          this.$api.addAdmin(formData).then(res => {
-            this.$message.success('添加成功');
-            this.dialogVisible = false;
-            this.resetForm();
-          }).catch(error => {
-            this.$message.error('添加失败: ' + error.message);
-          });
-          */
-
-          
-
-        //   // 4. 实际发送请求到后端
-        //   addUser(formData).then(res => {
-        //     console.log("后端响应:", res); // 关键：打印完整响应
-        //     if (res.code === 0) {
-        //       this.$message.success('添加成功');
-        //       this.dialogVisible = false;
-        //       this.resetForm();
-        //     } else {
-        //       this.$message.error(res.message || '添加失败');
-        //     }
-        //   }).catch(error => {
-        //     this.$message.error('添加失败: ' + error.message);
-        //   });
-        // } else {
-        //   this.$message.error('请填写必填字段');
-        //   return false;
-        // }
 
         addUser(formData).then(res => {
           console.log("完整响应:", res); // 保留日志便于调试
@@ -233,7 +174,6 @@ export default {
             this.dialogVisible = false;
             this.resetForm();
           } else {
-            // 修正点3：使用后端返回的明确消息
             this.$message.error(res.data.resultMsg || '操作失败'); 
           }
         }).catch(error => {
@@ -244,7 +184,7 @@ export default {
           return false;
         }
 
-        //   // 5. 模拟成功提交
+        //   //模拟成功提交
         //   this.$message.success('表单验证通过，数据已准备好提交');
         //   this.dialogVisible = false;
         //   this.resetForm();
